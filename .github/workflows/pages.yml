@@ -22,10 +22,12 @@ jobs:
           flutter-version: "3.x"
           channel: "any"
 
-      - run: cd example
-      - run: flutter --version
-      - run: flutter pub get
-      - run: flutter build web --no-tree-shake-icons
+      - name: Build Web
+        working-directory: ./example
+        run: |
+          flutter --version
+          flutter pub get
+          flutter build web --no-tree-shake-icons
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
