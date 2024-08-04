@@ -27,7 +27,7 @@ jobs:
         run: |
           flutter --version
           flutter pub get
-          flutter build web --no-tree-shake-icons --base-href "flutter_confetti"
+          flutter build web --no-tree-shake-icons --base-href "/flutter_confetti/"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
