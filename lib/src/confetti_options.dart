@@ -76,4 +76,37 @@ class ConfettiOptions {
       this.ticks = 200})
       : assert(decay >= 0 && decay <= 1),
         assert(ticks > 0);
+
+  /// Create a copy of this object with the given fields replaced with new values.
+  ConfettiOptions copyWith({
+    int? particleCount,
+    double? angle,
+    double? spread,
+    double? startVelocity,
+    double? decay,
+    double? gravity,
+    double? drift,
+    bool? flat,
+    double? scalar,
+    double? x,
+    double? y,
+    int? ticks,
+    List<Color>? colors,
+  }) {
+    return ConfettiOptions(
+      particleCount: particleCount ?? this.particleCount,
+      angle: angle ?? this.angle,
+      spread: spread ?? this.spread,
+      startVelocity: startVelocity ?? this.startVelocity,
+      decay: decay ?? this.decay,
+      gravity: gravity ?? this.gravity,
+      drift: drift ?? this.drift,
+      flat: flat ?? this.flat,
+      scalar: scalar ?? this.scalar,
+      x: x ?? this.x,
+      y: y ?? this.y,
+      ticks: ticks ?? this.ticks,
+      colors: colors ?? this.colors,
+    );
+  }
 }
