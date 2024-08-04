@@ -159,7 +159,7 @@ class MainApp extends StatelessWidget {
                       Confetti.launch(context,
                           options:
                               options.copyWith(particleCount: 40, scalar: 1.2),
-                          particleBuilder: (index) => Start());
+                          particleBuilder: (index) => Star());
                       Confetti.launch(context,
                           options: options.copyWith(
                             particleCount: 10,

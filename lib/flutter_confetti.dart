@@ -8,5 +8,5 @@ export 'src/confetti_particle.dart';
 export 'src/confetti.dart';
 
 /// shapes
-export 'src/shapes/start.dart';
+export 'src/shapes/star.dart';
 export 'src/shapes/circle.dart';
