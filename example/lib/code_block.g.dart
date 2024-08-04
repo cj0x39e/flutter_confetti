@@ -1,5 +1,5 @@
 /// AUTO-GENERATED FILE, DO NOT MODIFY
-var titleList = ['Basic Cannon','Random Direction','Fireworks'];
+var titleList = ['Basic Cannon','Random Direction','Fireworks','Stars'];
 var codeList = ['''
 
 Confetti.launch(
@@ -38,12 +38,15 @@ Timer.periodic(const Duration(milliseconds: 250), (timer) {
     return;
   }
 
-  int count = (progress / total * 50).toInt();
+  int count = ((1 - progress / total) * 50).toInt();
 
   Confetti.launch(
     context,
     options: ConfettiOptions(
         particleCount: count,
+        startVelocity: 30,
+        spread: 360,
+        ticks: 60,
         x: randomInRange(0.1, 0.3),
         y: Random().nextDouble() - 0.2),
   );
@@ -51,10 +54,45 @@ Timer.periodic(const Duration(milliseconds: 250), (timer) {
     context,
     options: ConfettiOptions(
         particleCount: count,
+        startVelocity: 30,
+        spread: 360,
+        ticks: 60,
         x: randomInRange(0.7, 0.9),
         y: Random().nextDouble() - 0.2),
   );
 });
+
+''','''
+
+const options = ConfettiOptions(
+    spread: 360,
+    ticks: 50,
+    gravity: 0,
+    decay: 0.94,
+    startVelocity: 30,
+    colors: [
+      Color(0xffFFE400),
+      Color(0xffFFBD00),
+      Color(0xffE89400),
+      Color(0xffFFCA6C),
+      Color(0xffFDFFB8)
+    ]);
+
+shoot() {
+  Confetti.launch(context,
+      options:
+          options.copyWith(particleCount: 40, scalar: 1.2),
+      particleBuilder: (index) => Start());
+  Confetti.launch(context,
+      options: options.copyWith(
+        particleCount: 10,
+        scalar: 0.75,
+      ));
+}
+
+Timer(Duration.zero, shoot);
+Timer(const Duration(milliseconds: 100), shoot);
+Timer(const Duration(milliseconds: 200), shoot);
 
 '''];
 
