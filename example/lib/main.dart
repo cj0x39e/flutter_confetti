@@ -173,7 +173,54 @@ class MainApp extends StatelessWidget {
 
                     ///END
                   },
-                )
+                ),
+                CodeBlock(
+                  buttonText: 'School Pride',
+                  highlighter: _dartDarkHighlighter,
+                  onTap: () {
+                    ///BEGIN
+
+                    const colors = [
+                      Color(0xffbb0000),
+                      Color(0xffffffff),
+                    ];
+
+                    int frameTime = 1000 ~/ 24;
+                    int total = 15 * 1000 ~/ frameTime;
+                    int progress = 0;
+
+                    Timer.periodic(Duration(milliseconds: frameTime), (timer) {
+                      progress++;
+
+                      if (progress >= total) {
+                        timer.cancel();
+                        return;
+                      }
+
+                      Confetti.launch(
+                        context,
+                        options: const ConfettiOptions(
+                            particleCount: 2,
+                            angle: 60,
+                            spread: 55,
+                            x: 0,
+                            colors: colors),
+                      );
+
+                      Confetti.launch(
+                        context,
+                        options: const ConfettiOptions(
+                            particleCount: 2,
+                            angle: 120,
+                            spread: 55,
+                            x: 1,
+                            colors: colors),
+                      );
+                    });
+
+                    ///END
+                  },
+                ),
               ],
             ),
           );

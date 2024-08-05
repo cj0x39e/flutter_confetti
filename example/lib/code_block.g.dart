@@ -1,5 +1,5 @@
 /// AUTO-GENERATED FILE, DO NOT MODIFY
-var titleList = ['Basic Cannon','Random Direction','Fireworks','Stars'];
+var titleList = ['Basic Cannon','Random Direction','Fireworks','Stars','School Pride'];
 var codeList = ['''
 
 Confetti.launch(
@@ -93,6 +93,46 @@ shoot() {
 Timer(Duration.zero, shoot);
 Timer(const Duration(milliseconds: 100), shoot);
 Timer(const Duration(milliseconds: 200), shoot);
+
+''','''
+
+const colors = [
+  Color(0xffbb0000),
+  Color(0xffffffff),
+];
+
+int frameTime = 1000 ~/ 24;
+int total = 15 * 1000 ~/ frameTime;
+int progress = 0;
+
+Timer.periodic(Duration(milliseconds: frameTime), (timer) {
+  progress++;
+
+  if (progress >= total) {
+    timer.cancel();
+    return;
+  }
+
+  Confetti.launch(
+    context,
+    options: const ConfettiOptions(
+        particleCount: 2,
+        angle: 60,
+        spread: 55,
+        x: 0,
+        colors: colors),
+  );
+
+  Confetti.launch(
+    context,
+    options: const ConfettiOptions(
+        particleCount: 2,
+        angle: 120,
+        spread: 55,
+        x: 1,
+        colors: colors),
+  );
+});
 
 '''];
 
