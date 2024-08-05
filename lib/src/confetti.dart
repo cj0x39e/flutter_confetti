@@ -47,8 +47,7 @@ class Confetti extends StatefulWidget {
   /// [particleBuilder] is the builder that creates the particles. if you don't
   /// provide one, a default one will be used.The default particles are circles and squares..
   static void launch(BuildContext context,
-      {required ConfettiOptions options,
-      final ParticleBuilder? particleBuilder}) {
+      {required ConfettiOptions options, ParticleBuilder? particleBuilder}) {
     OverlayState overlayState = Overlay.of(context);
     OverlayEntry? overlayEntry;
 
