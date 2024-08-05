@@ -10,3 +10,4 @@ export 'src/confetti.dart';
 /// shapes
 export 'src/shapes/star.dart';
 export 'src/shapes/circle.dart';
+export 'src/shapes/square.dart';

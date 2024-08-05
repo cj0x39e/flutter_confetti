@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_confetti/src/confetti_controller.dart';
 import 'package:flutter_confetti/src/confetti_options.dart';
 import 'package:flutter_confetti/src/confetti_physics.dart';
+import 'package:flutter_confetti/src/shapes/square.dart';
 import 'package:flutter_confetti/src/utils/glue.dart';
 import 'package:flutter_confetti/src/utils/launcher.dart';
 import 'package:flutter_confetti/src/utils/painter.dart';
@@ -16,7 +19,7 @@ class Confetti extends StatefulWidget {
 
   /// A builder that creates the particles.
   /// if you don't provide one, a default one will be used.
-  /// the default particle is a circle.
+  /// the default particles are circles and squares.
   final ParticleBuilder? particleBuilder;
 
   /// The controller of the confetti.
@@ -42,7 +45,7 @@ class Confetti extends StatefulWidget {
   /// [context] is the context of the APP.
   /// [options] is the options used to launch the confetti.
   /// [particleBuilder] is the builder that creates the particles. if you don't
-  /// provide one, a default one will be used.The default particle is a circle.
+  /// provide one, a default one will be used.The default particles are circles and squares..
   static void launch(BuildContext context,
       {required ConfettiOptions options,
       final ParticleBuilder? particleBuilder}) {
@@ -84,6 +87,10 @@ class _ConfettiState extends State<Confetti>
 
   AnimationController? animationController;
 
+  randomInt(int min, int max) {
+    return Random().nextInt(max - min) + min;
+  }
+
   addParticles() {
     List<Color> colors =
         options.colors.isNotEmpty ? options.colors : [Colors.red];
@@ -91,7 +98,7 @@ class _ConfettiState extends State<Confetti>
 
     final particleBuilder = widget.particleBuilder != null
         ? widget.particleBuilder!
-        : (int index) => Circle();
+        : (int index) => [Circle(), Square()][randomInt(0, 2)];
 
     List<Glue> list = [];
 
