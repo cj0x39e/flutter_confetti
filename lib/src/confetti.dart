@@ -15,7 +15,7 @@ typedef ParticleBuilder = ConfettiParticle Function(int index);
 
 class Confetti extends StatefulWidget {
   /// The options used to launch the confetti.
-  final ConfettiOptions options;
+  final ConfettiOptions? options;
 
   /// A builder that creates the particles.
   /// if you don't provide one, a default one will be used.
@@ -31,7 +31,7 @@ class Confetti extends StatefulWidget {
 
   const Confetti(
       {super.key,
-      required this.options,
+      this.options,
       this.particleBuilder,
       this.controller,
       this.onFinished});
@@ -79,7 +79,7 @@ class Confetti extends StatefulWidget {
 class _ConfettiState extends State<Confetti>
     with SingleTickerProviderStateMixin {
   ConfettiOptions get options {
-    return widget.options;
+    return widget.options ?? const ConfettiOptions();
   }
 
   List<Glue> glueList = [];
@@ -87,11 +87,16 @@ class _ConfettiState extends State<Confetti>
   late AnimationController animationController;
   late Animation<double> animation;
 
+  double containerWidth = 0;
+  double containerHeight = 0;
+
   randomInt(int min, int max) {
     return Random().nextInt(max - min) + min;
   }
 
   addParticles() {
+    final hasController = widget.controller != null;
+
     List<Color> colors =
         options.colors.isNotEmpty ? options.colors : [Colors.red];
     final colorsCount = colors.length;
@@ -106,8 +111,9 @@ class _ConfettiState extends State<Confetti>
       final color = colors[i % colorsCount];
       final glue = Glue(
           particle: particleBuilder(i),
-          physics: ConfettiPhysics.fromOptions(
-              options: widget.options, color: color));
+          physics: ConfettiPhysics.fromOptions(options: options, color: color)
+            ..x = hasController ? containerWidth * options.x : 1
+            ..y = hasController ? containerHeight * options.y : 1);
       list.add(glue);
     }
 
@@ -187,11 +193,24 @@ class _ConfettiState extends State<Confetti>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
+    final animated = AnimatedBuilder(
       animation: animation,
       builder: (context, child) {
         return CustomPaint(painter: Painter(glueList: glueList));
       },
     );
+
+    if (widget.controller != null) {
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          containerWidth = constraints.maxWidth;
+          containerHeight = constraints.maxHeight;
+
+          return animated;
+        },
+      );
+    } else {
+      return animated;
+    }
   }
 }

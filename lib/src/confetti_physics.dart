@@ -27,19 +27,15 @@ class ConfettiPhysics {
   double progress = 0;
   bool get finished => ticket > totalTicks;
 
-  double xPercent;
-  double yPercent;
-  double x = 1;
-  double y = 1;
+  double x = 0;
+  double y = 0;
   double x1 = 0;
   double x2 = 0;
   double y1 = 0;
   double y2 = 0;
 
   ConfettiPhysics(
-      {required this.xPercent,
-      required this.yPercent,
-      required this.wobble,
+      {required this.wobble,
       required this.wobbleSpeed,
       required this.velocity,
       required this.angle2D,
@@ -64,8 +60,6 @@ class ConfettiPhysics {
     final radSpread = options.spread * (pi / 180);
 
     return ConfettiPhysics(
-        xPercent: options.x,
-        yPercent: options.y,
         wobble: Random().nextDouble() * 10,
         wobbleSpeed: min(0.11, Random().nextDouble() * 0.1 + 0.05),
         velocity: options.startVelocity * 0.5 +
