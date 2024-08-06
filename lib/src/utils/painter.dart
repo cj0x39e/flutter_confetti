@@ -3,9 +3,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_confetti/src/utils/glue.dart';
 
 class Painter extends CustomPainter {
-  List<Glue> glueList = [];
+  final List<Glue> glueList;
+  final int key;
 
-  Painter({required this.glueList});
+  const Painter({required this.glueList, required this.key});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -31,7 +32,7 @@ class Painter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
+  bool shouldRepaint(covariant Painter oldDelegate) {
+    return key != oldDelegate.key;
   }
 }

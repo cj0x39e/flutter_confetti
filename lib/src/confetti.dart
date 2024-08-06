@@ -86,6 +86,8 @@ class _ConfettiState extends State<Confetti>
 
   AnimationController? animationController;
 
+  int key = 0;
+
   randomInt(int min, int max) {
     return Random().nextInt(max - min) + min;
   }
@@ -124,15 +126,17 @@ class _ConfettiState extends State<Confetti>
         glueList =
             glueList.where((element) => !element.physics.finished).toList();
 
-        if (glueList.isEmpty) {
+        if (glueList.isNotEmpty) {
+          setState(() {
+            key++;
+          });
+        } else {
           animationController?.stop();
 
           if (widget.onFinished != null) {
             widget.onFinished!();
           }
         }
-
-        setState(() {});
       });
 
       animationController!.repeat();
@@ -179,7 +183,7 @@ class _ConfettiState extends State<Confetti>
     return LayoutBuilder(builder: (context, constraints) {
       return CustomPaint(
         size: Size(constraints.maxWidth, constraints.maxHeight),
-        painter: Painter(glueList: glueList),
+        painter: Painter(glueList: glueList, key: key),
       );
     });
   }
