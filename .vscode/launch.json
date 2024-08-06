@@ -7,8 +7,13 @@
     {
       "name": "Debug",
       "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "Profile",
+      "request": "launch",
       "type": "dart",
-      "args": ["--dart-define", "ENV=DEV"]
+      "flutterMode": "profile"
     }
   ]
 }
