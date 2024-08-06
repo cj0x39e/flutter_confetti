@@ -97,8 +97,7 @@ class _ConfettiState extends State<Confetti>
   addParticles() {
     final hasController = widget.controller != null;
 
-    List<Color> colors =
-        options.colors.isNotEmpty ? options.colors : [Colors.red];
+    final colors = options.colors;
     final colorsCount = colors.length;
 
     final particleBuilder = widget.particleBuilder != null
