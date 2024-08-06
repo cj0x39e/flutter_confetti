@@ -29,14 +29,12 @@ class ConfettiPhysics {
 
   double xPercent;
   double yPercent;
-  double x = 0;
-  double y = 0;
+  double x = 1;
+  double y = 1;
   double x1 = 0;
   double x2 = 0;
   double y1 = 0;
   double y2 = 0;
-
-  bool isInit = false;
 
   ConfettiPhysics(
       {required this.xPercent,
@@ -88,13 +86,6 @@ class ConfettiPhysics {
         scalar: options.scalar,
         flat: options.flat,
         totalTicks: options.ticks);
-  }
-
-  initOrigin(double width, double height) {
-    if (isInit) return;
-    isInit = true;
-    x = width * xPercent;
-    y = height * yPercent;
   }
 
   update() {

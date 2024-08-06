@@ -59,8 +59,8 @@ class Confetti extends StatefulWidget {
           return Positioned(
             left: width * options.x,
             top: height * options.y,
-            width: 1,
-            height: 1,
+            width: 2,
+            height: 2,
             child: Confetti(
               options: options,
               particleBuilder: particleBuilder,
@@ -84,9 +84,8 @@ class _ConfettiState extends State<Confetti>
 
   List<Glue> glueList = [];
 
-  AnimationController? animationController;
-
-  int key = 0;
+  late AnimationController animationController;
+  late Animation<double> animation;
 
   randomInt(int min, int max) {
     return Random().nextInt(max - min) + min;
@@ -115,35 +114,27 @@ class _ConfettiState extends State<Confetti>
     glueList.addAll(list);
   }
 
-  playAnimation() {
-    if (animationController == null) {
-      animationController = AnimationController(
-          vsync: this, duration: const Duration(seconds: 1));
-      final animation =
-          Tween<double>(begin: 0, end: 1).animate(animationController!);
+  initAnimation() {
+    animationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    animation = Tween<double>(begin: 0, end: 1).animate(animationController);
 
-      animation.addListener(() {
-        glueList =
-            glueList.where((element) => !element.physics.finished).toList();
+    animation.addListener(() {
+      final running = glueList.any((element) => !element.physics.finished);
 
-        if (glueList.isNotEmpty) {
-          setState(() {
-            key++;
-          });
-        } else {
-          animationController?.stop();
+      if (!running) {
+        animationController.stop();
 
-          if (widget.onFinished != null) {
-            widget.onFinished!();
-          }
+        if (widget.onFinished != null) {
+          widget.onFinished!();
         }
-      });
-
-      animationController!.repeat();
-    } else {
-      if (animationController!.isAnimating == false) {
-        animationController!.repeat();
       }
+    });
+  }
+
+  playAnimation() {
+    if (animationController.isAnimating == false) {
+      animationController.repeat();
     }
   }
 
@@ -156,6 +147,8 @@ class _ConfettiState extends State<Confetti>
   void initState() {
     super.initState();
 
+    initAnimation();
+
     if (widget.controller == null) {
       launch();
     } else {
@@ -165,7 +158,7 @@ class _ConfettiState extends State<Confetti>
 
   @override
   void dispose() {
-    animationController?.dispose();
+    animationController.dispose();
 
     if (widget.controller != null) {
       Launcher.unload(widget.controller!);
@@ -176,15 +169,12 @@ class _ConfettiState extends State<Confetti>
 
   @override
   Widget build(BuildContext context) {
-    if (animationController == null) {
-      return const SizedBox.shrink();
-    }
-
-    return LayoutBuilder(builder: (context, constraints) {
-      return CustomPaint(
-        size: Size(constraints.maxWidth, constraints.maxHeight),
-        painter: Painter(glueList: glueList, key: key),
-      );
-    });
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, child) {
+        return CustomPaint(
+            painter: Painter(glueList: glueList, key: animation.value));
+      },
+    );
   }
 }
