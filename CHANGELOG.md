@@ -1,3 +1,8 @@
+## 0.2.0
+
+- Refactor the code, Make the render faster a little again
+- Options is not required
+
 ## 0.1.1
 
 - Make the render faster a little
