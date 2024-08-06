@@ -114,15 +114,33 @@ class _ConfettiState extends State<Confetti>
     glueList.addAll(list);
   }
 
+  bool updatePhysics() {
+    bool finished = true;
+
+    for (var i = 0; i < glueList.length; i++) {
+      final glue = glueList[i];
+
+      if (!glue.physics.finished) {
+        glue.physics.update();
+
+        if (finished == true) {
+          finished = false;
+        }
+      }
+    }
+
+    return finished;
+  }
+
   initAnimation() {
     animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     animation = Tween<double>(begin: 0, end: 1).animate(animationController);
 
     animation.addListener(() {
-      final running = glueList.any((element) => !element.physics.finished);
+      final finished = updatePhysics();
 
-      if (!running) {
+      if (finished) {
         animationController.stop();
 
         if (widget.onFinished != null) {
@@ -172,8 +190,7 @@ class _ConfettiState extends State<Confetti>
     return AnimatedBuilder(
       animation: animation,
       builder: (context, child) {
-        return CustomPaint(
-            painter: Painter(glueList: glueList, key: animation.value));
+        return CustomPaint(painter: Painter(glueList: glueList));
       },
     );
   }
