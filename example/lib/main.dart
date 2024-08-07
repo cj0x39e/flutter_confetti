@@ -34,8 +34,15 @@ void main() async {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  final controller = ConfettiController();
 
   @override
   Widget build(BuildContext context) {
@@ -221,6 +228,42 @@ class MainApp extends StatelessWidget {
                     ///END
                   },
                 ),
+                CodeBlock(
+                  buttonText: 'Not Full Screen',
+                  highlighter: _dartDarkHighlighter,
+                  onTap: () {
+                    ///BEGIN
+                    controller.launch();
+
+                    // Wrap the Confetti widget in a Container.
+                    // Container(
+                    //   child: ClipPath(
+                    //     child: Confetti(
+                    //       controller: controller,
+                    //       options: const ConfettiOptions(
+                    //           particleCount: 100, spread: 70, y: 1),
+                    //     ),
+                    //   ),
+                    // );
+
+                    ///END
+                  },
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    border: Border.all(
+                        width: 1, color: Theme.of(context).primaryColor),
+                  ),
+                  child: ClipPath(
+                    child: Confetti(
+                      controller: controller,
+                      options: const ConfettiOptions(
+                          particleCount: 100, spread: 70, y: 1),
+                    ),
+                  ),
+                )
               ],
             ),
           );

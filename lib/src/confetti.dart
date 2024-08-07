@@ -86,16 +86,18 @@ class _ConfettiState extends State<Confetti>
 
   late AnimationController animationController;
 
-  double containerWidth = 0;
-  double containerHeight = 0;
+  bool get withParent {
+    return widget.controller != null;
+  }
+
+  late double containerWidth;
+  late double containerHeight;
 
   randomInt(int min, int max) {
     return Random().nextInt(max - min) + min;
   }
 
   addParticles() {
-    final hasController = widget.controller != null;
-
     final colors = options.colors;
     final colorsCount = colors.length;
 
@@ -103,37 +105,19 @@ class _ConfettiState extends State<Confetti>
         ? widget.particleBuilder!
         : (int index) => [Circle(), Square()][randomInt(0, 2)];
 
-    List<Glue> list = [];
+    double x = withParent ? options.x * containerWidth : 1;
+    double y = withParent ? options.y * containerWidth : 1;
 
     for (int i = 0; i < options.particleCount; i++) {
       final color = colors[i % colorsCount];
-      final glue = Glue(
-          particle: particleBuilder(i),
-          physics: ConfettiPhysics.fromOptions(options: options, color: color)
-            ..x = hasController ? containerWidth * options.x : 1
-            ..y = hasController ? containerHeight * options.y : 1);
-      list.add(glue);
+      final physic = ConfettiPhysics.fromOptions(options: options, color: color)
+        ..x = x
+        ..y = y;
+
+      final glue = Glue(particle: particleBuilder(i), physics: physic);
+
+      glueList.add(glue);
     }
-
-    glueList.addAll(list);
-  }
-
-  bool updatePhysics() {
-    bool finished = true;
-
-    for (var i = 0; i < glueList.length; i++) {
-      final glue = glueList[i];
-
-      if (!glue.physics.finished) {
-        glue.physics.update();
-
-        if (finished == true) {
-          finished = false;
-        }
-      }
-    }
-
-    return finished;
   }
 
   initAnimation() {
@@ -141,7 +125,7 @@ class _ConfettiState extends State<Confetti>
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
     animationController.addListener(() {
-      final finished = updatePhysics();
+      final finished = !glueList.any((element) => !element.physics.finished);
 
       if (finished) {
         animationController.stop();
@@ -170,10 +154,34 @@ class _ConfettiState extends State<Confetti>
 
     initAnimation();
 
-    if (widget.controller == null) {
-      launch();
-    } else {
+    if (withParent) {
       Launcher.load(widget.controller!, launch);
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) {
+          launch();
+        },
+      );
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant Confetti oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.controller != oldWidget.controller) {
+      if (oldWidget.controller != null) {
+        Launcher.unload(widget.controller!);
+      }
+
+      if (widget.controller != null) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) {
+            launch();
+          },
+        );
+        Launcher.load(widget.controller!, launch);
+      }
     }
   }
 
@@ -190,23 +198,22 @@ class _ConfettiState extends State<Confetti>
 
   @override
   Widget build(BuildContext context) {
-    final animated = CustomPaint(
-      isComplex: true,
+    final paint = CustomPaint(
+      willChange: true,
       painter:
           Painter(glueList: glueList, animationController: animationController),
+      child: const SizedBox.expand(),
     );
 
-    if (widget.controller != null) {
-      return LayoutBuilder(
-        builder: (context, constraints) {
-          containerWidth = constraints.maxWidth;
-          containerHeight = constraints.maxHeight;
+    if (withParent) {
+      return LayoutBuilder(builder: (context, constraints) {
+        containerWidth = constraints.maxWidth;
+        containerHeight = constraints.maxHeight;
 
-          return animated;
-        },
-      );
+        return paint;
+      });
     } else {
-      return animated;
+      return paint;
     }
   }
 }

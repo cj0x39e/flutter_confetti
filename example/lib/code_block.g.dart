@@ -1,5 +1,5 @@
 /// AUTO-GENERATED FILE, DO NOT MODIFY
-var titleList = ['Basic Cannon','Random Direction','Fireworks','Stars','School Pride'];
+var titleList = ['Basic Cannon','Random Direction','Fireworks','Stars','School Pride','Not Full Screen'];
 var codeList = ['''
 
 Confetti.launch(
@@ -133,6 +133,20 @@ Timer.periodic(Duration(milliseconds: frameTime), (timer) {
         colors: colors),
   );
 });
+
+''','''
+controller.launch();
+
+// Wrap the Confetti widget in a Container.
+// Container(
+//   child: ClipPath(
+//     child: Confetti(
+//       controller: controller,
+//       options: const ConfettiOptions(
+//           particleCount: 100, spread: 70, y: 1),
+//     ),
+//   ),
+// );
 
 '''];
 
