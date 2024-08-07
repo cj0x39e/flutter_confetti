@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_confetti/src/utils/glue.dart';
 
 class Painter extends CustomPainter {
+  final AnimationController animationController;
   final List<Glue> glueList;
 
-  const Painter({required this.glueList});
+  const Painter({required this.glueList, required this.animationController})
+      : super(repaint: animationController);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -19,6 +20,6 @@ class Painter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant Painter oldDelegate) {
-    return true;
+    return false;
   }
 }

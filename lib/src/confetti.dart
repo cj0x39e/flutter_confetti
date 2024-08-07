@@ -85,7 +85,6 @@ class _ConfettiState extends State<Confetti>
   List<Glue> glueList = [];
 
   late AnimationController animationController;
-  late Animation<double> animation;
 
   double containerWidth = 0;
   double containerHeight = 0;
@@ -140,9 +139,8 @@ class _ConfettiState extends State<Confetti>
   initAnimation() {
     animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
-    animation = Tween<double>(begin: 0, end: 1).animate(animationController);
 
-    animation.addListener(() {
+    animationController.addListener(() {
       final finished = updatePhysics();
 
       if (finished) {
@@ -192,11 +190,10 @@ class _ConfettiState extends State<Confetti>
 
   @override
   Widget build(BuildContext context) {
-    final animated = AnimatedBuilder(
-      animation: animation,
-      builder: (context, child) {
-        return CustomPaint(painter: Painter(glueList: glueList));
-      },
+    final animated = CustomPaint(
+      isComplex: true,
+      painter:
+          Painter(glueList: glueList, animationController: animationController),
     );
 
     if (widget.controller != null) {
