@@ -24,17 +24,22 @@ class Confetti extends StatefulWidget {
 
   /// The controller of the confetti.
   /// in general, you don't need to provide one.
-  final ConfettiController? controller;
+  final ConfettiController controller;
 
   /// A callback that will be called when the confetti finished its animation.
   final Function()? onFinished;
+
+  /// if true, the confetti will be launched instantly as soon as it is created.
+  /// the default value is false.
+  final bool instant;
 
   const Confetti(
       {super.key,
       this.options,
       this.particleBuilder,
-      this.controller,
-      this.onFinished});
+      required this.controller,
+      this.onFinished,
+      this.instant = false});
 
   @override
   State<Confetti> createState() => _ConfettiState();
@@ -46,10 +51,15 @@ class Confetti extends StatefulWidget {
   /// [options] is the options used to launch the confetti.
   /// [particleBuilder] is the builder that creates the particles. if you don't
   /// provide one, a default one will be used.The default particles are circles and squares..
-  static void launch(BuildContext context,
-      {required ConfettiOptions options, ParticleBuilder? particleBuilder}) {
-    OverlayState overlayState = Overlay.of(context);
+  /// [onFinished] is a callback that will be called when the confetti finished its animation.
+  static ConfettiController launch(
+    BuildContext context, {
+    required ConfettiOptions options,
+    ParticleBuilder? particleBuilder,
+    Function(OverlayEntry overlayEntry)? onFinished,
+  }) {
     OverlayEntry? overlayEntry;
+    final controller = ConfettiController();
 
     overlayEntry = OverlayEntry(
         builder: (BuildContext ctx) {
@@ -62,17 +72,25 @@ class Confetti extends StatefulWidget {
             width: 2,
             height: 2,
             child: Confetti(
-              options: options,
+              controller: controller,
+              options: options.copyWith(x: 0.5, y: 0.5),
               particleBuilder: particleBuilder,
               onFinished: () {
-                overlayEntry?.remove();
+                if (onFinished != null) {
+                  onFinished(overlayEntry!);
+                } else {
+                  overlayEntry?.remove();
+                }
               },
+              instant: true,
             ),
           );
         },
         opaque: false);
 
-    overlayState.insert(overlayEntry);
+    Overlay.of(context).insert(overlayEntry);
+
+    return controller;
   }
 }
 
@@ -85,10 +103,6 @@ class _ConfettiState extends State<Confetti>
   List<Glue> glueList = [];
 
   late AnimationController animationController;
-
-  bool get withParent {
-    return widget.controller != null;
-  }
 
   late double containerWidth;
   late double containerHeight;
@@ -105,8 +119,8 @@ class _ConfettiState extends State<Confetti>
         ? widget.particleBuilder!
         : (int index) => [Circle(), Square()][randomInt(0, 2)];
 
-    double x = withParent ? options.x * containerWidth : 1;
-    double y = withParent ? options.y * containerWidth : 1;
+    double x = options.x * containerWidth;
+    double y = options.y * containerWidth;
 
     for (int i = 0; i < options.particleCount; i++) {
       final color = colors[i % colorsCount];
@@ -154,15 +168,15 @@ class _ConfettiState extends State<Confetti>
 
     initAnimation();
 
-    if (withParent) {
-      Launcher.load(widget.controller!, launch);
-    } else {
+    if (widget.instant) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) {
           launch();
         },
       );
     }
+
+    Launcher.load(widget.controller, launch);
   }
 
   @override
@@ -170,18 +184,8 @@ class _ConfettiState extends State<Confetti>
     super.didUpdateWidget(oldWidget);
 
     if (widget.controller != oldWidget.controller) {
-      if (oldWidget.controller != null) {
-        Launcher.unload(widget.controller!);
-      }
-
-      if (widget.controller != null) {
-        WidgetsBinding.instance.addPostFrameCallback(
-          (_) {
-            launch();
-          },
-        );
-        Launcher.load(widget.controller!, launch);
-      }
+      Launcher.unload(oldWidget.controller);
+      Launcher.load(widget.controller, launch);
     }
   }
 
@@ -189,31 +193,23 @@ class _ConfettiState extends State<Confetti>
   void dispose() {
     animationController.dispose();
 
-    if (widget.controller != null) {
-      Launcher.unload(widget.controller!);
-    }
+    Launcher.unload(widget.controller);
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final paint = CustomPaint(
-      willChange: true,
-      painter:
-          Painter(glueList: glueList, animationController: animationController),
-      child: const SizedBox.expand(),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      containerWidth = constraints.maxWidth;
+      containerHeight = constraints.maxHeight;
 
-    if (withParent) {
-      return LayoutBuilder(builder: (context, constraints) {
-        containerWidth = constraints.maxWidth;
-        containerHeight = constraints.maxHeight;
-
-        return paint;
-      });
-    } else {
-      return paint;
-    }
+      return CustomPaint(
+        willChange: true,
+        painter: Painter(
+            glueList: glueList, animationController: animationController),
+        child: const SizedBox.expand(),
+      );
+    });
   }
 }
