@@ -1,6 +1,13 @@
+## 0.3.0
+
+- the `controller` argument of `Confetti` is required now
+- add the `instant` argument to `Confetti`
+- `Confetti.launch` will return the controller created from the inner, and has added an argument called `onFinished` that will be invoked as the animation has finished
+- Refactor the code, make the render faster a little again
+
 ## 0.2.0
 
-- Refactor the code, Make the render faster a little again
+- Refactor the code, make the render faster a little again
 - Options is not required
 
 ## 0.1.1
