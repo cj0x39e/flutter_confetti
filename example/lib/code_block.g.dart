@@ -30,36 +30,61 @@ double randomInRange(double min, double max) {
 int total = 60;
 int progress = 0;
 
+ConfettiController? controller1;
+ConfettiController? controller2;
+
+bool isDone = false;
+
 Timer.periodic(const Duration(milliseconds: 250), (timer) {
   progress++;
 
   if (progress >= total) {
+    isDone = true;
     timer.cancel();
     return;
   }
 
   int count = ((1 - progress / total) * 50).toInt();
 
-  Confetti.launch(
-    context,
-    options: ConfettiOptions(
-        particleCount: count,
-        startVelocity: 30,
-        spread: 360,
-        ticks: 60,
-        x: randomInRange(0.1, 0.3),
-        y: Random().nextDouble() - 0.2),
-  );
-  Confetti.launch(
-    context,
-    options: ConfettiOptions(
-        particleCount: count,
-        startVelocity: 30,
-        spread: 360,
-        ticks: 60,
-        x: randomInRange(0.7, 0.9),
-        y: Random().nextDouble() - 0.2),
-  );
+  if (controller1 == null) {
+    controller1 = Confetti.launch(
+      context,
+      options: ConfettiOptions(
+          particleCount: count,
+          startVelocity: 30,
+          spread: 360,
+          ticks: 60,
+          x: randomInRange(0.1, 0.3),
+          y: Random().nextDouble() - 0.2),
+      onFinished: (overlayEntry) {
+        if (isDone) {
+          overlayEntry.remove();
+        }
+      },
+    );
+  } else {
+    controller1!.launch();
+  }
+
+  if (controller2 == null) {
+    controller2 = Confetti.launch(
+      context,
+      options: ConfettiOptions(
+          particleCount: count,
+          startVelocity: 30,
+          spread: 360,
+          ticks: 60,
+          x: randomInRange(0.7, 0.9),
+          y: Random().nextDouble() - 0.2),
+      onFinished: (overlayEntry) {
+        if (isDone) {
+          overlayEntry.remove();
+        }
+      },
+    );
+  } else {
+    controller2?.launch();
+  }
 });
 
 ''','''
@@ -105,33 +130,55 @@ int frameTime = 1000 ~/ 24;
 int total = 15 * 1000 ~/ frameTime;
 int progress = 0;
 
+ConfettiController? controller1;
+ConfettiController? controller2;
+bool isDone = false;
+
 Timer.periodic(Duration(milliseconds: frameTime), (timer) {
   progress++;
 
   if (progress >= total) {
     timer.cancel();
+    isDone = true;
     return;
   }
+  if (controller1 == null) {
+    controller1 = Confetti.launch(
+      context,
+      options: const ConfettiOptions(
+          particleCount: 2,
+          angle: 60,
+          spread: 55,
+          x: 0,
+          colors: colors),
+      onFinished: (overlayEntry) {
+        if (isDone) {
+          overlayEntry.remove();
+        }
+      },
+    );
+  } else {
+    controller1!.launch();
+  }
 
-  Confetti.launch(
-    context,
-    options: const ConfettiOptions(
-        particleCount: 2,
-        angle: 60,
-        spread: 55,
-        x: 0,
-        colors: colors),
-  );
-
-  Confetti.launch(
-    context,
-    options: const ConfettiOptions(
-        particleCount: 2,
-        angle: 120,
-        spread: 55,
-        x: 1,
-        colors: colors),
-  );
+  if (controller2 == null) {
+    controller2 = Confetti.launch(
+      context,
+      options: const ConfettiOptions(
+          particleCount: 2,
+          angle: 120,
+          spread: 55,
+          x: 1,
+          colors: colors),
+      onFinished: (overlayEntry) {
+        if (isDone) {
+          overlayEntry.remove();
+        }
+      },
+    );
+  } else {
+    controller2!.launch();
+  }
 });
 
 ''','''
