@@ -1,3 +1,7 @@
+## 0.3.1
+
+- Add the triangle shape by [@Imad Eddine](https://github.com/DidoHZ)
+
 ## 0.3.0
 
 - the `controller` argument of `Confetti` is required now

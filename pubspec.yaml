@@ -1,6 +1,6 @@
 name: flutter_confetti
 description: "Confetti animation in Flutter, a powerful and easy-to-use library to show amazing confetti effects."
-version: 0.3.0
+version: 0.3.1
 homepage: https://github.com/cj0x39e/flutter_confetti
 
 environment:
