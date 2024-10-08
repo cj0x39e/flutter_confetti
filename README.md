@@ -128,7 +128,7 @@ Or you can create your own builder, such as return the Star like below:
  );
 ```
 
-Up to now there are three shapes: Circle, Square, and Star, but you can create a shape by inheriting the ConfettiParticle class, like the Circle class below:
+Up to now there are four shapes: Circle, Square, Star, and Triangle. You can create a shape by inheriting the ConfettiParticle class, like the Circle class below:
 
 ```dart
 /// 1. Inherit from ConfettiParticle
