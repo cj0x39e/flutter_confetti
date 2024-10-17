@@ -107,20 +107,25 @@ const options = ConfettiOptions(
 
 shoot() {
   Confetti.launch(context,
-      options:
-          options.copyWith(particleCount: 40, scalar: 1.2),
-      particleBuilder: (index) => Emoji(emoji: '🎉'));
+      options: options.copyWith(
+        particleCount: 40,
+      ),
+      particleBuilder: (index) => Emoji(
+          emoji: '🍄',
+          textStyle: GoogleFonts.notoColorEmoji()));
   Confetti.launch(context,
       options: options.copyWith(
         particleCount: 10,
-        scalar: 0.75,
       ),
-      particleBuilder: (index) => Emoji(emoji: '🎉'));
+      particleBuilder: (index) => Emoji(
+            emoji: '️⚽',
+            textStyle: GoogleFonts.notoColorEmoji(),
+          ));
 }
 
 Timer(Duration.zero, shoot);
-Timer(const Duration(milliseconds: 100), shoot);
 Timer(const Duration(milliseconds: 200), shoot);
+Timer(const Duration(milliseconds: 400), shoot);
 
 ''','''
 
