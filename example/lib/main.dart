@@ -5,6 +5,7 @@ import 'package:example/code_block.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_confetti/flutter_confetti.dart';
 import 'package:syntax_highlight/syntax_highlight.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // late final Highlighter _dartLightHighlighter;
 late final Highlighter _dartDarkHighlighter;
@@ -47,7 +48,9 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData(
+        useMaterial3: true,
+      ),
       themeMode: ThemeMode.dark,
       home: Scaffold(
         appBar: AppBar(title: const Text('🎉 Flutter Confetti🎉 ')),
@@ -171,12 +174,54 @@ class _MainAppState extends State<MainApp> {
                           options: options.copyWith(
                             particleCount: 10,
                             scalar: 0.75,
-                          ));
+                          ),
+                          particleBuilder: (index) => Star());
                     }
 
                     Timer(Duration.zero, shoot);
                     Timer(const Duration(milliseconds: 100), shoot);
                     Timer(const Duration(milliseconds: 200), shoot);
+
+                    ///END
+                  },
+                ),
+                CodeBlock(
+                  buttonText: 'Emoji',
+                  tip:
+                      'The demo uses google web fonts so the first call may take a few seconds to download the font.',
+                  highlighter: _dartDarkHighlighter,
+                  onTap: () {
+                    ///BEGIN
+
+                    const options = ConfettiOptions(
+                      spread: 360,
+                      ticks: 50,
+                      gravity: 0,
+                      decay: 0.94,
+                      startVelocity: 30,
+                    );
+
+                    shoot() {
+                      Confetti.launch(context,
+                          options: options.copyWith(
+                            particleCount: 40,
+                          ),
+                          particleBuilder: (index) => Emoji(
+                              emoji: '🍄',
+                              textStyle: GoogleFonts.notoColorEmoji()));
+                      Confetti.launch(context,
+                          options: options.copyWith(
+                            particleCount: 10,
+                          ),
+                          particleBuilder: (index) => Emoji(
+                                emoji: '️⚽',
+                                textStyle: GoogleFonts.notoColorEmoji(),
+                              ));
+                    }
+
+                    Timer(Duration.zero, shoot);
+                    Timer(const Duration(milliseconds: 200), shoot);
+                    Timer(const Duration(milliseconds: 400), shoot);
 
                     ///END
                   },
