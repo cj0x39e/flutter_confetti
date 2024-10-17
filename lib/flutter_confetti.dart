@@ -12,3 +12,4 @@ export 'src/shapes/star.dart';
 export 'src/shapes/circle.dart';
 export 'src/shapes/square.dart';
 export 'src/shapes/triangle.dart';
+export 'src/shapes/emoji.dart';

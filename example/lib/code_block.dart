@@ -7,11 +7,14 @@ class CodeBlock extends StatelessWidget {
   final Highlighter highlighter;
   final String buttonText;
   final Function() onTap;
-  const CodeBlock(
-      {super.key,
-      required this.buttonText,
-      required this.onTap,
-      required this.highlighter});
+  final String? tip;
+  const CodeBlock({
+    super.key,
+    required this.buttonText,
+    required this.onTap,
+    required this.highlighter,
+    this.tip,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +38,12 @@ class CodeBlock extends StatelessWidget {
                     await Clipboard.setData(ClipboardData(text: codesStr));
                   },
                   icon: const Icon(Icons.copy_all_rounded)),
+              if (tip != null)
+                Expanded(
+                    child: Text(
+                  tip ?? '',
+                  style: const TextStyle(color: Colors.red, fontSize: 10),
+                ))
             ],
           ),
           const SizedBox(

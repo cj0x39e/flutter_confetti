@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   syntax_highlight: ^0.4.0
+  google_fonts: ^6.2.1
 
   flutter_confetti:
     path: ../

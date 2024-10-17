@@ -1,5 +1,5 @@
 /// AUTO-GENERATED FILE, DO NOT MODIFY
-var titleList = ['Basic Cannon','Random Direction','Fireworks','Stars','School Pride','Not Full Screen'];
+var titleList = ['Basic Cannon','Random Direction','Fireworks','Stars','Emoji','School Pride','Not Full Screen'];
 var codeList = ['''
 
 Confetti.launch(
@@ -30,61 +30,36 @@ double randomInRange(double min, double max) {
 int total = 60;
 int progress = 0;
 
-ConfettiController? controller1;
-ConfettiController? controller2;
-
-bool isDone = false;
-
 Timer.periodic(const Duration(milliseconds: 250), (timer) {
   progress++;
 
   if (progress >= total) {
-    isDone = true;
     timer.cancel();
     return;
   }
 
   int count = ((1 - progress / total) * 50).toInt();
 
-  if (controller1 == null) {
-    controller1 = Confetti.launch(
-      context,
-      options: ConfettiOptions(
-          particleCount: count,
-          startVelocity: 30,
-          spread: 360,
-          ticks: 60,
-          x: randomInRange(0.1, 0.3),
-          y: Random().nextDouble() - 0.2),
-      onFinished: (overlayEntry) {
-        if (isDone) {
-          overlayEntry.remove();
-        }
-      },
-    );
-  } else {
-    controller1!.launch();
-  }
-
-  if (controller2 == null) {
-    controller2 = Confetti.launch(
-      context,
-      options: ConfettiOptions(
-          particleCount: count,
-          startVelocity: 30,
-          spread: 360,
-          ticks: 60,
-          x: randomInRange(0.7, 0.9),
-          y: Random().nextDouble() - 0.2),
-      onFinished: (overlayEntry) {
-        if (isDone) {
-          overlayEntry.remove();
-        }
-      },
-    );
-  } else {
-    controller2?.launch();
-  }
+  Confetti.launch(
+    context,
+    options: ConfettiOptions(
+        particleCount: count,
+        startVelocity: 30,
+        spread: 360,
+        ticks: 60,
+        x: randomInRange(0.1, 0.3),
+        y: Random().nextDouble() - 0.2),
+  );
+  Confetti.launch(
+    context,
+    options: ConfettiOptions(
+        particleCount: count,
+        startVelocity: 30,
+        spread: 360,
+        ticks: 60,
+        x: randomInRange(0.7, 0.9),
+        y: Random().nextDouble() - 0.2),
+  );
 });
 
 ''','''
@@ -112,7 +87,35 @@ shoot() {
       options: options.copyWith(
         particleCount: 10,
         scalar: 0.75,
-      ));
+      ),
+      particleBuilder: (index) => Star());
+}
+
+Timer(Duration.zero, shoot);
+Timer(const Duration(milliseconds: 100), shoot);
+Timer(const Duration(milliseconds: 200), shoot);
+
+''','''
+
+const options = ConfettiOptions(
+  spread: 360,
+  ticks: 50,
+  gravity: 0,
+  decay: 0.94,
+  startVelocity: 30,
+);
+
+shoot() {
+  Confetti.launch(context,
+      options:
+          options.copyWith(particleCount: 40, scalar: 1.2),
+      particleBuilder: (index) => Emoji(emoji: '🎉'));
+  Confetti.launch(context,
+      options: options.copyWith(
+        particleCount: 10,
+        scalar: 0.75,
+      ),
+      particleBuilder: (index) => Emoji(emoji: '🎉'));
 }
 
 Timer(Duration.zero, shoot);

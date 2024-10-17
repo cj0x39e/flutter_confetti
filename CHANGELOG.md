@@ -1,3 +1,7 @@
+## 0.3.2
+
+- Add the emoji shape
+
 ## 0.3.1
 
 - Add the triangle shape by [@Imad Eddine](https://github.com/DidoHZ)
