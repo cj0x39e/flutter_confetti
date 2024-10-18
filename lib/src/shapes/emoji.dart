@@ -8,11 +8,11 @@ import 'package:flutter_confetti/src/confetti_physics.dart';
 
 class Emoji extends ConfettiParticle {
   final String emoji;
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
 
   Emoji({
     required this.emoji,
-    required this.textStyle,
+    this.textStyle,
   });
 
   ui.Image? _cachedImage;
@@ -20,18 +20,22 @@ class Emoji extends ConfettiParticle {
   Future<ui.Image> _createTextImage() async {
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder);
+    final textStyle = this.textStyle ?? const TextStyle();
     final fontSize = textStyle.fontSize ?? 18;
-    final width = fontSize + 2;
+    final scaleFontSize = fontSize * 4;
 
     final textPainter = TextPainter(
-      text: TextSpan(text: emoji, style: textStyle),
+      text: TextSpan(
+          text: emoji, style: textStyle.copyWith(fontSize: scaleFontSize)),
       textDirection: TextDirection.ltr,
     );
-    textPainter.layout(maxWidth: width);
+    textPainter.layout();
     textPainter.paint(canvas, Offset.zero);
 
     final picture = recorder.endRecording();
-    return picture.toImage(width.toInt(), width.toInt());
+    final imageSize = (scaleFontSize + 10).toInt();
+
+    return picture.toImage(imageSize, imageSize);
   }
 
   @override
@@ -50,6 +54,7 @@ class Emoji extends ConfettiParticle {
 
     canvas.translate(physics.x, physics.y);
     canvas.rotate(pi / 10 * physics.wobble);
+    canvas.scale(0.25, 0.25);
 
     final paint = Paint()
       ..color = Color.fromRGBO(255, 255, 255, 1 - physics.progress);

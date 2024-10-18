@@ -167,7 +167,16 @@ As soon as you have created your shape, you can use it in the `particleBuilder`:
 
 ## How to use emoji
 
-The simplest way is to use the `google_fonts` package:
+If you just want to use system emoji, you can use the `Emoji` class directly:
+
+```dart
+Confetti.launch(context,
+    /// ...
+    particleBuilder: (index) => Emoji(
+        emoji: '🍄'));
+```
+
+Or you can use it with the `google_fonts` package:
 
 ```dart
 import 'package:google_fonts/google_fonts.dart';
@@ -179,7 +188,7 @@ Confetti.launch(context,
         textStyle: GoogleFonts.notoColorEmoji()));
 ```
 
-Or you can use any emoji fonts you want:
+Or use any emoji fonts you want:
 
 1. Download the font and add it to your pubspec.yaml.
 

@@ -1,3 +1,7 @@
+## 0.3.3
+
+- Improve the render quality of the emoji
+
 ## 0.3.2
 
 - Add the emoji shape
