@@ -115,4 +115,8 @@ class ConfettiPhysics {
     x2 = wobbleX + random * tiltCos;
     y2 = wobbleY + random * tiltSin;
   }
+
+  kill() {
+    ticket = totalTicks + 1;
+  }
 }

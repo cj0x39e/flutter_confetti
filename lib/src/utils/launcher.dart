@@ -1,12 +1,18 @@
-class Launcher {
-  static final Map<Object, Function()> _bullets = {};
+import 'package:flutter_confetti/src/utils/launcher_config.dart';
 
-  static load(Object key, Function() callback) {
-    _bullets[key] = callback;
+class Launcher {
+  static final Map<Object, LauncherConfig> _bullets = {};
+
+  static load(Object key, LauncherConfig launcherConfig) {
+    _bullets[key] = launcherConfig;
   }
 
   static launch(Object key) {
-    _bullets[key]?.call();
+    _bullets[key]?.onLaunch();
+  }
+
+  static kill(Object key) {
+    _bullets[key]?.onKill();
   }
 
   static unload(Object key) {
