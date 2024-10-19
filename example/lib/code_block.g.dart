@@ -1,5 +1,5 @@
 /// AUTO-GENERATED FILE, DO NOT MODIFY
-var titleList = ['Basic Cannon','Random Direction','Fireworks','Stars','Emoji','School Pride','Not Full Screen'];
+var titleList = ['Basic Cannon','Random Direction','Fireworks','Stars','Emoji','School Pride','Launch(then click the kill button)','Not Full Screen'];
 var codeList = ['''
 
 Confetti.launch(
@@ -188,6 +188,17 @@ Timer.periodic(Duration(milliseconds: frameTime), (timer) {
     controller2!.launch();
   }
 });
+
+''','''
+
+final controller = Confetti.launch(
+  context,
+  options: const ConfettiOptions(
+      particleCount: 100, spread: 70, y: 0.6),
+);
+
+/// call the kill method to kill the confetti
+/// controller.kill();
 
 ''','''
 controller.launch();

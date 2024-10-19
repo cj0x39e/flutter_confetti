@@ -8,10 +8,12 @@ class CodeBlock extends StatelessWidget {
   final String buttonText;
   final Function() onTap;
   final String? tip;
+  final Widget? otherButton;
   const CodeBlock({
     super.key,
     required this.buttonText,
     required this.onTap,
+    this.otherButton,
     required this.highlighter,
     this.tip,
   });
@@ -31,6 +33,10 @@ class CodeBlock extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               OutlinedButton(onPressed: onTap, child: Text(buttonText)),
+              if (otherButton != null) ...[
+                const SizedBox(width: 8),
+                otherButton!
+              ],
               const SizedBox(width: 8),
               IconButton(
                   color: Theme.of(context).primaryColor,

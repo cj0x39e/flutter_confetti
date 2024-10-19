@@ -44,6 +44,7 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   final controller = ConfettiController();
+  List<ConfettiController> killableControllerList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -296,6 +297,33 @@ class _MainAppState extends State<MainApp> {
                   },
                 ),
                 CodeBlock(
+                  buttonText: 'Launch(then click the kill button)',
+                  highlighter: _dartDarkHighlighter,
+                  onTap: () {
+                    ///BEGIN
+
+                    final controller = Confetti.launch(
+                      context,
+                      options: const ConfettiOptions(
+                          particleCount: 100, spread: 70, y: 0.6),
+                    );
+
+                    /// call the kill method to kill the confetti
+                    /// controller.kill();
+
+                    ///END
+
+                    killableControllerList.add(controller);
+                  },
+                  otherButton: OutlinedButton(
+                      onPressed: () {
+                        for (var controller in killableControllerList) {
+                          controller.kill();
+                        }
+                      },
+                      child: const Text('Kill')),
+                ),
+                CodeBlock(
                   buttonText: 'Not Full Screen',
                   highlighter: _dartDarkHighlighter,
                   onTap: () {
@@ -330,7 +358,7 @@ class _MainAppState extends State<MainApp> {
                           particleCount: 100, spread: 70, y: 1),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           );

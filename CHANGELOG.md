@@ -1,3 +1,7 @@
+## 0.3.4
+
+- Add the `controller.kill()` method to kill the showing confetti
+
 ## 0.3.3
 
 - Improve the render quality of the emoji

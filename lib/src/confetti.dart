@@ -7,6 +7,7 @@ import 'package:flutter_confetti/src/confetti_physics.dart';
 import 'package:flutter_confetti/src/shapes/square.dart';
 import 'package:flutter_confetti/src/utils/glue.dart';
 import 'package:flutter_confetti/src/utils/launcher.dart';
+import 'package:flutter_confetti/src/utils/launcher_config.dart';
 import 'package:flutter_confetti/src/utils/painter.dart';
 import 'package:flutter_confetti/src/confetti_particle.dart';
 import 'package:flutter_confetti/src/shapes/circle.dart';
@@ -162,6 +163,12 @@ class _ConfettiState extends State<Confetti>
     playAnimation();
   }
 
+  kill() {
+    for (var glue in glueList) {
+      glue.physics.kill();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -176,7 +183,8 @@ class _ConfettiState extends State<Confetti>
       );
     }
 
-    Launcher.load(widget.controller, launch);
+    Launcher.load(
+        widget.controller, LauncherConfig(onLaunch: launch, onKill: kill));
   }
 
   @override
@@ -185,7 +193,8 @@ class _ConfettiState extends State<Confetti>
 
     if (widget.controller != oldWidget.controller) {
       Launcher.unload(oldWidget.controller);
-      Launcher.load(widget.controller, launch);
+      Launcher.load(
+          widget.controller, LauncherConfig(onLaunch: launch, onKill: kill));
     }
   }
 

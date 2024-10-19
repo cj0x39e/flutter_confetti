@@ -31,7 +31,7 @@ Confetti.launch(
 
 ## API
 
-### `Confetti.launch(BuildContext context, {required ConfettiOptions options, ParticleBuilder? particleBuilder})`
+### `ConfettiController Confetti.launch(BuildContext context, {required ConfettiOptions options, ParticleBuilder? particleBuilder})`
 
 A quick way to launch the confetti. can't use the method without the MaterialApp, CupertinoApp, or WidgetsApp as the root widget. Because the method depend on the Overlay, but you can use the Confetti widget directly.
 
@@ -164,6 +164,13 @@ class Circle extends ConfettiParticle {
 ```
 
 As soon as you have created your shape, you can use it in the `particleBuilder`:
+
+### `ConfettiController`
+
+Using the methods of the controller instance to control the confetti:
+
+- `controller.launch()`, launch the confetti.
+- `controller.kill()`, kill the showing confetti.
 
 ## How to use emoji
 

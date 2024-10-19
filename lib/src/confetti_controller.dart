@@ -5,4 +5,9 @@ class ConfettiController {
   launch() {
     Launcher.launch(this);
   }
+
+  /// kill the confetti
+  kill() {
+    Launcher.kill(this);
+  }
 }
