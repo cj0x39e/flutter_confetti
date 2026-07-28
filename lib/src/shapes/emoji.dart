@@ -73,7 +73,7 @@ class Emoji extends ConfettiParticle {
     canvas.rotate(pi / 10 * physics.wobble);
     canvas.scale(0.25, 0.25);
 
-    _paint.color = Color.fromRGBO(255, 255, 255, 1 - physics.progress);
+    _paint.color = Color.fromRGBO(255, 255, 255, physics.opacity);
 
     canvas.drawImage(_cachedImage!, Offset.zero, _paint);
 

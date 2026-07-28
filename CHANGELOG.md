@@ -1,3 +1,9 @@
+## 0.9.0
+
+- Add `ConfettiOptions.particleDuration` as a time-based alternative to `ticks`.
+- Add `ConfettiOptions.fadeOut` to keep particles opaque for their full lifetime.
+- Fix `Confetti.launch` positioning in nested, custom, and resized overlays.
+
 ## 0.8.0
 
 - Add snowfall support: `ConfettiOptions.randomX` and `driftVariance` let particles spawn across the top and drift naturally with `startVelocity: 0`.

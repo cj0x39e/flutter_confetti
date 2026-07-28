@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter_confetti/src/confetti_options.dart';
+import 'package:flutter_confetti/src/utils/simulation.dart';
 
 class ConfettiPhysics {
   static final Random _rng = Random();
@@ -16,6 +17,7 @@ class ConfettiPhysics {
   double scalar;
   double ovalScalar;
   bool flat;
+  bool fadeOut;
 
   int totalTicks;
   int ticket = 0;
@@ -87,6 +89,8 @@ class ConfettiPhysics {
     _renderProgress = value;
   }
 
+  double get opacity => fadeOut ? 1 - progress : 1;
+
   double wobbleX;
   double wobbleY;
   double tiltSin;
@@ -113,6 +117,7 @@ class ConfettiPhysics {
       required this.ovalScalar,
       required this.scalar,
       required this.flat,
+      required this.fadeOut,
       required this.tiltCos,
       required this.totalTicks}) {
     this.wobble = wobble;
@@ -122,21 +127,36 @@ class ConfettiPhysics {
 
   factory ConfettiPhysics.fromOptions(
       {required ConfettiOptions options, required Color color}) {
+    final particleDuration = options.particleDuration;
+    if (particleDuration != null && particleDuration <= Duration.zero) {
+      throw ArgumentError.value(
+        particleDuration,
+        'options.particleDuration',
+        'must be greater than zero',
+      );
+    }
+
     final radAngle = options.angle * (pi / 180);
     final radSpread = options.spread * (pi / 180);
+    final totalTicks = particleDuration == null
+        ? options.ticks
+        : max(
+            1,
+            (particleDuration.inMicroseconds / simulationStep.inMicroseconds)
+                .round(),
+          );
 
     return ConfettiPhysics(
         wobble: _rng.nextDouble() * 10,
         wobbleSpeed: min(0.11, _rng.nextDouble() * 0.1 + 0.05),
         velocity: options.startVelocity * 0.5 +
             _rng.nextDouble() * options.startVelocity,
-        angle2D:
-            -radAngle + (0.5 * radSpread - _rng.nextDouble() * radSpread),
+        angle2D: -radAngle + (0.5 * radSpread - _rng.nextDouble() * radSpread),
         tiltAngle: (_rng.nextDouble() * (0.75 - 0.25) + 0.25) * pi,
         color: color,
         decay: options.decay,
-        drift: options.drift +
-            (_rng.nextDouble() * 2 - 1) * options.driftVariance,
+        drift:
+            options.drift + (_rng.nextDouble() * 2 - 1) * options.driftVariance,
         random: _rng.nextDouble() + 2,
         tiltSin: 0,
         tiltCos: 0,
@@ -150,7 +170,8 @@ class ConfettiPhysics {
             ? options.scalar * (0.45 + _rng.nextDouble() * 0.7)
             : options.scalar,
         flat: options.flat,
-        totalTicks: options.ticks);
+        fadeOut: options.fadeOut,
+        totalTicks: totalTicks);
   }
 
   void update() {

@@ -75,7 +75,17 @@ class ConfettiOptions {
   final bool flat;
 
   /// How many times the confetti will move.
+  /// Ignored when [particleDuration] is provided.
   final int ticks;
+
+  /// How long each particle remains active after it is created.
+  ///
+  /// Must be greater than zero. When provided, this takes precedence over
+  /// [ticks].
+  final Duration? particleDuration;
+
+  /// Whether particles gradually become transparent before they finish.
+  final bool fadeOut;
 
   /// The x position on the page,
   /// with 0 being the left edge and 1 being the right edge.
@@ -115,11 +125,25 @@ class ConfettiOptions {
       this.x = 0.5,
       this.y = 0.5,
       this.ticks = 200,
+      this.particleDuration,
+      this.fadeOut = true,
       this.randomX = false,
       this.driftVariance = 0})
       : assert(decay >= 0 && decay <= 1),
         assert(ticks > 0);
 }
+```
+
+For a time-based lifetime without fading:
+
+```dart
+Confetti.launch(
+  context,
+  options: const ConfettiOptions(
+    particleDuration: Duration(seconds: 3),
+    fadeOut: false,
+  ),
+);
 ```
 
 ### `particleBuilder`
