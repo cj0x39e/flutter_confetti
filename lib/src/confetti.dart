@@ -79,14 +79,10 @@ class Confetti extends StatefulWidget {
 
     overlayEntry = OverlayEntry(
         builder: (BuildContext ctx) {
-          final height = MediaQuery.of(ctx).size.height;
-          final width = MediaQuery.of(ctx).size.width;
-
           final confetti = Confetti(
             controller: controller,
-            options: options.randomX
-                ? options
-                : options.copyWith(x: 0.5, y: 0.5),
+            options:
+                options.randomX ? options : options.copyWith(x: 0.5, y: 0.5),
             particleBuilder: particleBuilder,
             onFinished: () {
               if (onFinished != null) {
@@ -106,12 +102,23 @@ class Confetti extends StatefulWidget {
             );
           }
 
-          return Positioned(
-            left: width * options.x,
-            top: height * options.y,
-            width: 2,
-            height: 2,
-            child: confetti,
+          return Positioned.fill(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned(
+                      left: constraints.maxWidth * options.x,
+                      top: constraints.maxHeight * options.y,
+                      width: 2,
+                      height: 2,
+                      child: confetti,
+                    ),
+                  ],
+                );
+              },
+            ),
           );
         },
         opaque: false);
@@ -226,8 +233,7 @@ class _ConfettiState extends State<Confetti>
     // Drawing each frame at a position interpolated between the previous
     // and the current physics step keeps the motion smooth instead of
     // stuttering whenever a frame runs zero or two physics steps.
-    final alpha =
-        accumulator.inMicroseconds / physicsTick.inMicroseconds;
+    final alpha = accumulator.inMicroseconds / physicsTick.inMicroseconds;
 
     for (final glue in glueList) {
       glue.physics.interpolate(alpha);
