@@ -10,6 +10,7 @@ import 'package:flutter_confetti/src/utils/glue.dart';
 import 'package:flutter_confetti/src/utils/launcher.dart';
 import 'package:flutter_confetti/src/utils/launcher_config.dart';
 import 'package:flutter_confetti/src/utils/painter.dart';
+import 'package:flutter_confetti/src/utils/simulation.dart';
 import 'package:flutter_confetti/src/confetti_particle.dart';
 import 'package:flutter_confetti/src/shapes/circle.dart';
 
@@ -143,11 +144,6 @@ class _ConfettiState extends State<Confetti>
 
   late final Ticker ticker;
 
-  /// The physics simulation always runs at 60 ticks per second, no matter
-  /// what the display refresh rate is, so the confetti speed is the same
-  /// on every device.
-  static const physicsTick = Duration(microseconds: 16667);
-
   Duration lastElapsed = Duration.zero;
   Duration accumulator = Duration.zero;
 
@@ -195,15 +191,15 @@ class _ConfettiState extends State<Confetti>
     // Avoid a burst of updates after the ticker was muted for a while,
     // e.g. when the app was in the background.
     if (delta > const Duration(milliseconds: 100)) {
-      delta = physicsTick;
+      delta = simulationStep;
     }
 
     accumulator += delta;
 
     bool updated = false;
 
-    while (accumulator >= physicsTick) {
-      accumulator -= physicsTick;
+    while (accumulator >= simulationStep) {
+      accumulator -= simulationStep;
 
       for (final glue in glueList) {
         if (!glue.physics.finished) {
@@ -233,7 +229,7 @@ class _ConfettiState extends State<Confetti>
     // Drawing each frame at a position interpolated between the previous
     // and the current physics step keeps the motion smooth instead of
     // stuttering whenever a frame runs zero or two physics steps.
-    final alpha = accumulator.inMicroseconds / physicsTick.inMicroseconds;
+    final alpha = accumulator.inMicroseconds / simulationStep.inMicroseconds;
 
     for (final glue in glueList) {
       glue.physics.interpolate(alpha);

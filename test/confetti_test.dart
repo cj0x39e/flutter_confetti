@@ -39,6 +39,39 @@ void main() {
 
     // 30 physics ticks at a fixed 60 ticks/s should take ~500ms of wall time
     // on both refresh rates.
-    expect((at60Hz - at120Hz).abs(), lessThan(const Duration(milliseconds: 50)));
+    expect(
+        (at60Hz - at120Hz).abs(), lessThan(const Duration(milliseconds: 50)));
+  });
+
+  testWidgets('particle duration controls how long particles remain active',
+      (tester) async {
+    var finished = false;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Confetti(
+          controller: ConfettiController(),
+          options: const ConfettiOptions(
+            particleDuration: Duration(milliseconds: 500),
+            particleCount: 1,
+          ),
+          onFinished: () => finished = true,
+          instant: true,
+        ),
+      ),
+    );
+
+    await tester.pump();
+
+    var elapsed = Duration.zero;
+    const frame = Duration(milliseconds: 16);
+    while (!finished && elapsed < const Duration(seconds: 1)) {
+      await tester.pump(frame);
+      elapsed += frame;
+    }
+
+    expect(finished, isTrue);
+    expect(elapsed, greaterThanOrEqualTo(const Duration(milliseconds: 500)));
+    expect(elapsed, lessThan(const Duration(milliseconds: 550)));
   });
 }

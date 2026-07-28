@@ -21,7 +21,7 @@ class Triangle extends ConfettiParticle {
       ..lineTo(physics.x2.floor().toDouble(), physics.wobbleY.ceil().toDouble())
       ..close();
 
-    _paint.color = physics.color.withValues(alpha: 1 - physics.progress);
+    _paint.color = physics.color.withValues(alpha: physics.opacity);
 
     canvas.drawPath(_path, _paint);
 

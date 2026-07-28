@@ -23,7 +23,7 @@ class Snowflake extends ConfettiParticle {
     canvas.scale(physics.scalar, physics.scalar);
 
     _paint
-      ..color = physics.color.withValues(alpha: 1 - physics.progress)
+      ..color = physics.color.withValues(alpha: physics.opacity)
       ..strokeWidth = 1.2;
 
     const arms = 6;
@@ -46,12 +46,14 @@ class Snowflake extends ConfettiParticle {
 
       canvas.drawLine(
         Offset(bx, by),
-        Offset(bx + dx * branch * 0.3 + perpX * branch, by + dy * branch * 0.3 + perpY * branch),
+        Offset(bx + dx * branch * 0.3 + perpX * branch,
+            by + dy * branch * 0.3 + perpY * branch),
         _paint,
       );
       canvas.drawLine(
         Offset(bx, by),
-        Offset(bx + dx * branch * 0.3 - perpX * branch, by + dy * branch * 0.3 - perpY * branch),
+        Offset(bx + dx * branch * 0.3 - perpX * branch,
+            by + dy * branch * 0.3 - perpY * branch),
         _paint,
       );
     }

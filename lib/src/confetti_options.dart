@@ -43,7 +43,17 @@ class ConfettiOptions {
   final bool flat;
 
   /// How many times the confetti will move.
+  /// Ignored when [particleDuration] is provided.
   final int ticks;
+
+  /// How long each particle remains active after it is created.
+  ///
+  /// Must be greater than zero. When provided, this takes precedence over
+  /// [ticks].
+  final Duration? particleDuration;
+
+  /// Whether particles gradually become transparent before they finish.
+  final bool fadeOut;
 
   /// The x position on the page,
   /// with 0 being the left edge and 1 being the right edge.
@@ -83,6 +93,8 @@ class ConfettiOptions {
       this.x = 0.5,
       this.y = 0.5,
       this.ticks = 200,
+      this.particleDuration,
+      this.fadeOut = true,
       this.randomX = false,
       this.driftVariance = 0})
       : assert(decay >= 0 && decay <= 1),
@@ -103,6 +115,8 @@ class ConfettiOptions {
     double? x,
     double? y,
     int? ticks,
+    Duration? particleDuration,
+    bool? fadeOut,
     List<Color>? colors,
     bool? randomX,
     double? driftVariance,
@@ -120,6 +134,9 @@ class ConfettiOptions {
       x: x ?? this.x,
       y: y ?? this.y,
       ticks: ticks ?? this.ticks,
+      particleDuration:
+          particleDuration ?? (ticks == null ? this.particleDuration : null),
+      fadeOut: fadeOut ?? this.fadeOut,
       colors: colors ?? this.colors,
       randomX: randomX ?? this.randomX,
       driftVariance: driftVariance ?? this.driftVariance,

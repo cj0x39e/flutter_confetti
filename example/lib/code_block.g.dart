@@ -6,6 +6,7 @@ Confetti.launch(
   options: const ConfettiOptions(
       particleCount: 100,
       spread: 70,
+      particleDuration: Duration(seconds: 3),
       y: 0.6),
 );
 
@@ -175,6 +176,7 @@ Timer.periodic(
         startVelocity: 0,
         spread: 360,
         ticks: 1000,
+        fadeOut: false,
         gravity: 0.4,
         driftVariance: 0.6,
         scalar: 0.7,
