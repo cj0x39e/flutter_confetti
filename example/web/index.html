@@ -19,7 +19,7 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="Flutter Confetti demo — celebration effects for Flutter.">
-  <meta name="theme-color" content="#FAFBFD">
+  <meta name="theme-color" content="#FFFFFF">
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -37,18 +37,14 @@
     html, body {
       height: 100%;
       margin: 0;
-      background-color: #FAFBFD;
+      background-color: #FFFFFF;
+      /* Reserve scrollbar space so the layout doesn't shift when it appears. */
+      scrollbar-gutter: stable;
     }
 
-    /* Override Flutter's default blue DWDS loading bar. */
+    /* Hide Flutter's default loading progress bar. */
     .flutter-loader {
-      background-color: #E6E9F0 !important;
-    }
-    .indeterminate:before {
-      background-color: #FF5E7E !important;
-    }
-    .indeterminate:after {
-      background-color: #A25AFD !important;
+      display: none !important;
     }
   </style>
 </head>

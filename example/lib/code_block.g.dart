@@ -1,5 +1,5 @@
 /// AUTO-GENERATED FILE, DO NOT MODIFY
-var titleList = ['Basic Cannon','Random Direction','Fireworks','Stars','Emoji','Snow','School Pride','Launch','Not Full Screen'];
+var titleList = ['Basic Cannon','Random Direction','Fireworks','Stars','Emoji','Snow','School Pride','Kill Mid-flight','Not Full Screen'];
 var codeList = ['''
 Confetti.launch(
   context,
@@ -144,9 +144,10 @@ Timer(const Duration(milliseconds: 400),
 ''','''
 
 const colors = [
-  Color(0xFFFFFFFF),
-  Color(0xFFE8F1FF),
-  Color(0xFFBFD7FF),
+  Color(0xFF5BA3E8),
+  Color(0xFF7EB6FF),
+  Color(0xFF9ECCF5),
+  Color(0xFF4A90D9),
 ];
 
 // ~12 seconds of snowfall.

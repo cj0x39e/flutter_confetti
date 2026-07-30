@@ -3,12 +3,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 /// Soft white stage with confetti-palette accents.
 abstract final class DemoColors {
-  static const canvas = Color(0xFFFAFBFD);
+  static const canvas = Color(0xFFFFFFFF);
   static const surface = Color(0xFFFFFFFF);
   static const ink = Color(0xFF1A1C22);
   static const inkMuted = Color(0xFF6B7280);
   static const line = Color(0xFFE6E9F0);
-  static const codeBg = Color(0xFF15171C);
+  static const codeBg = Color(0xFFF3F4F6);
 
   static const cyan = Color(0xFF26CCFF);
   static const violet = Color(0xFFA25AFD);
@@ -20,19 +20,12 @@ abstract final class DemoColors {
   static const accents = [cyan, violet, rose, sun, amber, magenta];
 }
 
-/// Shared corner radii so cards, panels, and controls feel like one system.
+/// Shared corner radii — square controls throughout the demo.
 abstract final class DemoRadii {
-  /// Small chips / tight accents.
-  static const sm = 8.0;
-
-  /// Nested panels (code well, snackbars).
-  static const md = 12.0;
-
-  /// Primary surfaces (demo cards).
-  static const lg = 16.0;
-
-  /// Pill buttons and stage controls.
-  static const pill = 999.0;
+  static const sm = 0.0;
+  static const md = 0.0;
+  static const lg = 0.0;
+  static const pill = 0.0;
 }
 
 /// Cached text styles so cards don't re-resolve Google Fonts on every build.
@@ -44,35 +37,10 @@ abstract final class DemoTextStyles {
     letterSpacing: -0.2,
   );
 
-  static final tip = GoogleFonts.dmSans(
-    color: DemoColors.inkMuted,
-    fontSize: 12,
-    height: 1.35,
-  );
-
-  static final play = GoogleFonts.dmSans(
-    fontWeight: FontWeight.w600,
-    fontSize: 13,
-  );
-
   static final code = GoogleFonts.jetBrainsMono(
     fontSize: 12.5,
     height: 1.45,
-    color: const Color(0xEBFFFFFF),
-  );
-
-  static final headerTitle = GoogleFonts.syne(
-    fontSize: 40,
-    height: 1.05,
-    fontWeight: FontWeight.w700,
-    letterSpacing: -1.2,
     color: DemoColors.ink,
-  );
-
-  static final headerSubtitle = GoogleFonts.dmSans(
-    fontSize: 15,
-    height: 1.45,
-    color: DemoColors.inkMuted,
   );
 }
 
@@ -127,7 +95,7 @@ ThemeData buildDemoTheme() {
     iconButtonTheme: IconButtonThemeData(
       style: IconButton.styleFrom(
         foregroundColor: DemoColors.inkMuted,
-        hoverColor: DemoColors.rose.withValues(alpha: 0.08),
+        hoverColor: DemoColors.ink.withValues(alpha: 0.06),
       ),
     ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(
