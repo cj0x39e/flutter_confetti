@@ -2,25 +2,37 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:example/code_block.dart';
-import 'package:example/confetti_backdrop.dart';
 import 'package:example/demo_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_confetti/flutter_confetti.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syntax_highlight/syntax_highlight.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-late final Highlighter _dartDarkHighlighter;
+late final Highlighter _dartHighlighter;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Bundled fonts in example/google_fonts/ load first (no network swap).
+  // Await every weight we use so the first frame already has final metrics.
+  await GoogleFonts.pendingFonts([
+    GoogleFonts.syne(),
+    GoogleFonts.syne(fontWeight: FontWeight.w700),
+    GoogleFonts.dmSans(),
+    GoogleFonts.dmSans(fontWeight: FontWeight.w500),
+    GoogleFonts.dmSans(fontWeight: FontWeight.w600),
+    GoogleFonts.dmSans(fontWeight: FontWeight.w700),
+    GoogleFonts.jetBrainsMono(),
+  ]);
+
   await Highlighter.initialize(['dart']);
 
-  final darkTheme = await HighlighterTheme.loadDarkTheme();
-  _dartDarkHighlighter = Highlighter(
+  final lightTheme = await HighlighterTheme.loadLightTheme();
+  _dartHighlighter = Highlighter(
     language: 'dart',
-    theme: darkTheme,
+    theme: lightTheme,
   );
 
   runApp(const MainApp());
@@ -60,40 +72,31 @@ class _MainAppState extends State<MainApp> {
                         ? 2
                         : 1;
                 const gap = 16.0;
-                final itemWidth =
-                    (width - 40 - gap * (crossAxisCount - 1)) / crossAxisCount;
 
-                return Stack(
-                  children: [
-                    const Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: 280,
-                      child: ConfettiBackdrop(),
-                    ),
-                    CustomScrollView(
-                      slivers: [
-                        const SliverToBoxAdapter(child: _Header()),
-                        SliverPadding(
-                          padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
-                          sliver: SliverGrid(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: crossAxisCount,
-                              crossAxisSpacing: gap,
-                              mainAxisSpacing: gap,
-                              childAspectRatio: itemWidth / 320,
-                            ),
-                            delegate: SliverChildListDelegate(
-                              _demoCards(context),
-                              addAutomaticKeepAlives: true,
-                            ),
+                return Scrollbar(
+                  thumbVisibility: true,
+                  child: CustomScrollView(
+                    slivers: [
+                      const SliverToBoxAdapter(child: _Header()),
+                      SliverPadding(
+                        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+                        sliver: SliverGrid(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: crossAxisCount,
+                            crossAxisSpacing: gap,
+                            mainAxisSpacing: gap,
+                            mainAxisExtent: 320,
+                          ),
+                          delegate: SliverChildListDelegate(
+                            _demoCards(context),
+                            addAutomaticKeepAlives: true,
                           ),
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      const SliverToBoxAdapter(child: _Footer()),
+                    ],
+                  ),
                 );
               },
             ),
@@ -107,8 +110,7 @@ class _MainAppState extends State<MainApp> {
     return [
       CodeBlock(
         buttonText: 'Basic Cannon',
-        highlighter: _dartDarkHighlighter,
-        stageHold: const Duration(seconds: 4),
+        highlighter: _dartHighlighter,
         onTap: () {
           ///BEGIN
           Confetti.launch(
@@ -125,8 +127,7 @@ class _MainAppState extends State<MainApp> {
       ),
       CodeBlock(
         buttonText: 'Random Direction',
-        highlighter: _dartDarkHighlighter,
-        stageHold: const Duration(seconds: 4),
+        highlighter: _dartHighlighter,
         onTap: () {
           ///BEGIN
           double randomInRange(double min, double max) {
@@ -149,8 +150,7 @@ class _MainAppState extends State<MainApp> {
       ),
       CodeBlock(
         buttonText: 'Fireworks',
-        highlighter: _dartDarkHighlighter,
-        stageHold: const Duration(seconds: 16),
+        highlighter: _dartHighlighter,
         onTap: () {
           ///BEGIN
           double randomInRange(double min, double max) {
@@ -201,8 +201,7 @@ class _MainAppState extends State<MainApp> {
       ),
       CodeBlock(
         buttonText: 'Stars',
-        highlighter: _dartDarkHighlighter,
-        stageHold: const Duration(seconds: 4),
+        highlighter: _dartHighlighter,
         onTap: () {
           ///BEGIN
 
@@ -245,8 +244,7 @@ class _MainAppState extends State<MainApp> {
       CodeBlock(
         buttonText: 'Emoji',
         tip: 'First run may pause briefly while the emoji font downloads.',
-        highlighter: _dartDarkHighlighter,
-        stageHold: const Duration(seconds: 5),
+        highlighter: _dartHighlighter,
         onTap: () {
           ///BEGIN
 
@@ -289,16 +287,15 @@ class _MainAppState extends State<MainApp> {
       ),
       CodeBlock(
         buttonText: 'Snow',
-        tip: 'Falls gently from the top — no cannon blast.',
-        highlighter: _dartDarkHighlighter,
-        stageHold: const Duration(seconds: 14),
+        highlighter: _dartHighlighter,
         onTap: () {
           ///BEGIN
 
           const colors = [
-            Color(0xFFFFFFFF),
-            Color(0xFFE8F1FF),
-            Color(0xFFBFD7FF),
+            Color(0xFF5BA3E8),
+            Color(0xFF7EB6FF),
+            Color(0xFF9ECCF5),
+            Color(0xFF4A90D9),
           ];
 
           // ~12 seconds of snowfall.
@@ -354,8 +351,7 @@ class _MainAppState extends State<MainApp> {
       ),
       CodeBlock(
         buttonText: 'School Pride',
-        highlighter: _dartDarkHighlighter,
-        stageHold: const Duration(seconds: 16),
+        highlighter: _dartHighlighter,
         onTap: () {
           ///BEGIN
 
@@ -425,10 +421,9 @@ class _MainAppState extends State<MainApp> {
         },
       ),
       CodeBlock(
-        buttonText: 'Launch',
-        tip: 'Play, then press Kill to stop mid-flight.',
-        highlighter: _dartDarkHighlighter,
-        useStage: false,
+        buttonText: 'Kill Mid-flight',
+        tip: 'Play, then press Kill to stop particles mid-flight.',
+        highlighter: _dartHighlighter,
         onTap: () {
           ///BEGIN
 
@@ -447,20 +442,19 @@ class _MainAppState extends State<MainApp> {
 
           killableControllerList.add(controller);
         },
-        otherButton: OutlinedButton(
+        otherButton: IconButton(
+          tooltip: 'Kill',
           onPressed: () {
-            for (var controller
-                in killableControllerList) {
+            for (var controller in killableControllerList) {
               controller.kill();
             }
           },
-          child: const Text('Kill'),
+          icon: const Icon(Icons.stop_rounded, size: 22),
         ),
       ),
       CodeBlock(
         buttonText: 'Not Full Screen',
-        highlighter: _dartDarkHighlighter,
-        useStage: false,
+        highlighter: _dartHighlighter,
         onTap: () {
           ///BEGIN
           controller.launch();
@@ -478,13 +472,8 @@ class _MainAppState extends State<MainApp> {
 
           ///END
         },
-        overWidget: Positioned(
-          left: 12,
-          right: 12,
-          bottom: 12,
-          top: 108,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(DemoRadii.md),
+        overWidget: Positioned.fill(
+          child: IgnorePointer(
             child: Confetti(
               controller: controller,
               options: const ConfettiOptions(
@@ -500,48 +489,276 @@ class _MainAppState extends State<MainApp> {
   }
 }
 
+class _Footer extends StatelessWidget {
+  const _Footer();
+
+  static final _github =
+      Uri.parse('https://github.com/tao-zhi-1992/flutter_confetti');
+  static final _pub =
+      Uri.parse('https://pub.dev/packages/flutter_confetti');
+
+  static final _muted = GoogleFonts.dmSans(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.3,
+    color: DemoColors.inkMuted,
+  );
+
+  static final _link = GoogleFonts.dmSans(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.2,
+    color: DemoColors.ink,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 0,
+        runSpacing: 8,
+        children: [
+          Text('v0.9.0', style: _muted),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text('·', style: _muted.copyWith(color: DemoColors.line)),
+          ),
+          Text('tao-zhi', style: _muted),
+          const SizedBox(width: 18),
+          _FooterLink(label: 'GitHub', uri: _github, style: _link),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text('/', style: _muted.copyWith(fontSize: 11)),
+          ),
+          _FooterLink(label: 'pub.dev', uri: _pub, style: _link),
+        ],
+      ),
+    );
+  }
+}
+
+class _FooterLink extends StatelessWidget {
+  const _FooterLink({
+    required this.label,
+    required this.uri,
+    required this.style,
+  });
+
+  final String label;
+  final Uri uri;
+  final TextStyle style;
+
+  Future<void> _open() async {
+    await launchUrl(
+      uri,
+      mode: LaunchMode.platformDefault,
+      webOnlyWindowName: '_blank',
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: _open,
+        child: Text(label, style: style),
+      ),
+    );
+  }
+}
+
 class _Header extends StatelessWidget {
   const _Header();
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final titleSize = width < 400
+        ? 42.0
+        : width < 720
+            ? 52.0
+            : 64.0;
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 28, 24, 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+      padding: const EdgeInsets.fromLTRB(24, 40, 24, 28),
+      child: Center(
+        child: GestureDetector(
+          onTap: () {
+            Confetti.launch(
+              context,
+              options: const ConfettiOptions(
+                particleCount: 55,
+                spread: 80,
+                startVelocity: 28,
+                y: 0.14,
+                particleDuration: Duration(seconds: 2),
+              ),
+            );
+          },
+          behavior: HitTestBehavior.opaque,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              ...List.generate(6, (i) {
-                return Container(
-                  width: 8,
-                  height: 8,
-                  margin: EdgeInsets.only(right: i == 5 ? 0 : 5),
-                  decoration: BoxDecoration(
-                    color: DemoColors.accents[i],
-                    borderRadius: BorderRadius.circular(
-                      i.isEven ? 2 : DemoRadii.sm,
-                    ),
+              Text(
+                'FLUTTER',
+                style: GoogleFonts.dmSans(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 6.5,
+                  foreground: Paint()
+                    ..style = PaintingStyle.stroke
+                    ..strokeWidth = 0.8
+                    ..strokeJoin = StrokeJoin.round
+                    ..color = const Color(0xFFB0B5BE),
+                ),
+              ),
+              const SizedBox(height: 8),
+              ShaderMask(
+                blendMode: BlendMode.srcIn,
+                shaderCallback: (bounds) {
+                  return const LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      DemoColors.cyan,
+                      DemoColors.violet,
+                      DemoColors.rose,
+                      DemoColors.amber,
+                      DemoColors.magenta,
+                    ],
+                  ).createShader(bounds);
+                },
+                child: Text(
+                  'Confetti',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.syne(
+                    fontSize: titleSize,
+                    fontWeight: FontWeight.w700,
+                    height: 1,
+                    letterSpacing: -2.2,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = titleSize * 0.045
+                      ..strokeJoin = StrokeJoin.round
+                      ..color = Colors.white,
                   ),
-                );
-              }),
+                ),
+              ),
+              const SizedBox(height: 18),
+              const _ConfettiRule(),
             ],
           ),
-          const SizedBox(height: 18),
-          Text(
-            'Flutter Confetti',
-            style: DemoTextStyles.headerTitle,
-          ),
-          const SizedBox(height: 10),
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 440),
-            child: Text(
-              'Press Play to preview an effect. Most demos open on a dark stage — you can replay or close anytime.',
-              style: DemoTextStyles.headerSubtitle,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
+}
+
+/// A quiet underline of confetti shapes — brand mark, not decoration spam.
+class _ConfettiRule extends StatelessWidget {
+  const _ConfettiRule();
+
+  @override
+  Widget build(BuildContext context) {
+    const pieces = <(Color, double, int)>[
+      (DemoColors.cyan, -0.25, 0),
+      (DemoColors.violet, 0.35, 1),
+      (DemoColors.rose, -0.15, 2),
+      (Color(0xFFFFC933), 0.4, 3),
+      (DemoColors.amber, -0.3, 0),
+      (DemoColors.magenta, 0.2, 1),
+    ];
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var i = 0; i < pieces.length; i++) ...[
+          if (i > 0) const SizedBox(width: 10),
+          Transform.rotate(
+            angle: pieces[i].$2,
+            child: _ConfettiChip(
+              color: pieces[i].$1,
+              kind: pieces[i].$3,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _ConfettiChip extends StatelessWidget {
+  const _ConfettiChip({required this.color, required this.kind});
+
+  final Color color;
+  final int kind;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      size: const Size(10, 10),
+      painter: _ChipPainter(color: color, kind: kind),
+    );
+  }
+}
+
+class _ChipPainter extends CustomPainter {
+  const _ChipPainter({required this.color, required this.kind});
+
+  final Color color;
+  final int kind;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.25
+      ..strokeJoin = StrokeJoin.miter;
+    final c = Offset(size.width / 2, size.height / 2);
+    final s = size.shortestSide / 2;
+
+    switch (kind % 4) {
+      case 0:
+        canvas.drawRect(
+          Rect.fromCenter(center: c, width: s * 2.1, height: s * 1.1),
+          paint,
+        );
+      case 1:
+        canvas.drawCircle(c, s * 0.85, paint);
+      case 2:
+        final path = Path()
+          ..moveTo(c.dx, c.dy - s)
+          ..lineTo(c.dx + s * 0.9, c.dy + s * 0.7)
+          ..lineTo(c.dx - s * 0.9, c.dy + s * 0.7)
+          ..close();
+        canvas.drawPath(path, paint);
+      default:
+        // Five-point star outline.
+        final star = Path();
+        for (var i = 0; i < 10; i++) {
+          final radius = i.isEven ? s : s * 0.42;
+          final angle = -pi / 2 + i * pi / 5;
+          final point = Offset(
+            c.dx + cos(angle) * radius,
+            c.dy + sin(angle) * radius,
+          );
+          if (i == 0) {
+            star.moveTo(point.dx, point.dy);
+          } else {
+            star.lineTo(point.dx, point.dy);
+          }
+        }
+        star.close();
+        canvas.drawPath(star, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _ChipPainter oldDelegate) =>
+      oldDelegate.color != color || oldDelegate.kind != kind;
 }

@@ -14,6 +14,7 @@ dependencies:
 
   flutter_confetti:
     path: ../
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
@@ -25,3 +26,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - google_fonts/
