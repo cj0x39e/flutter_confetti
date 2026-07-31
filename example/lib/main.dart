@@ -521,7 +521,7 @@ class _Footer extends StatelessWidget {
         spacing: 0,
         runSpacing: 8,
         children: [
-          Text('v0.9.1', style: _muted),
+          Text('v0.9.2', style: _muted),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text('·', style: _muted.copyWith(color: DemoColors.line)),

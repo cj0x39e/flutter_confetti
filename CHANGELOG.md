@@ -1,3 +1,7 @@
+## 0.9.2
+
+- Use an absolute header image URL so the README banner renders on pub.dev.
+
 ## 0.9.1
 
 - Slim the README and move detailed API docs to `doc/guide.md`.

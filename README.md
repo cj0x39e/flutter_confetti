@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://tao-zhi-1992.github.io/flutter_confetti/">
-    <img src="doc/header.png" alt="Flutter Confetti" width="720" />
+    <img src="https://raw.githubusercontent.com/tao-zhi-1992/flutter_confetti/main/doc/header.png" alt="Flutter Confetti" width="720" />
   </a>
 </p>
 
@@ -32,7 +32,7 @@ Or add it to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_confetti: ^0.9.1
+  flutter_confetti: ^0.9.2
 ```
 
 ## Quick start
