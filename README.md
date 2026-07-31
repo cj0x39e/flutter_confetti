@@ -19,8 +19,21 @@
 <p align="center">
   <a href="https://tao-zhi-1992.github.io/flutter_confetti/">Live demo</a>
   ·
-  <a href="doc/guide.md">Guide</a>
+  <a href="https://github.com/tao-zhi-1992/flutter_confetti/blob/main/doc/guide.md">Guide</a>
 </p>
+
+## Install
+
+```bash
+flutter pub add flutter_confetti
+```
+
+Or add it to your `pubspec.yaml`:
+
+```yaml
+dependencies:
+  flutter_confetti: ^0.9.0
+```
 
 ## Quick start
 
