@@ -32,7 +32,7 @@ Or add it to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_confetti: ^0.9.0
+  flutter_confetti: ^0.9.1
 ```
 
 ## Quick start

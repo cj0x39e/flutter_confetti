@@ -1,3 +1,8 @@
+## 0.9.1
+
+- Slim the README and move detailed API docs to `doc/guide.md`.
+- Add a transparent brand header and confetti web favicon/icons for the example demo.
+
 ## 0.9.0
 
 - Add `ConfettiOptions.particleDuration` as a time-based alternative to `ticks`.
